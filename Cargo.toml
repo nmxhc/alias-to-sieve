@@ -1,0 +1,14 @@
+[package]
+name = "alias_to_sieve"
+version = "0.1.0"
+edition = "2021"
+
+rust-version = "1.68.2"
+description = "Convert an alias file to a sieve script for stalwart-mail"
+readme = "README.md"
+license = " AGPL-3.0-only"
+keywords = ["mail", "sieve", "alias", "stalwart"]
+
+[dependencies]
+fqdn = {version = "0.4.2", features = ["domain-label-length-limited-to-63", "domain-name-without-special-chars"]}
+email-address-parser = "2.0.0"
