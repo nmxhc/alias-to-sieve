@@ -1,8 +1,10 @@
 This script converts an alias file to a sieve script for [stalwart-mail](https://stalw.art/).
 
+All local-parts are considered to be case-insensitive.
+
 ## Usage
 Given an alias file [`testdata/example.aliases`](testdata/example.aliases) that contains lines of redirects of the form localpart with optional `@fqdn` followed by a space followed by a list (space or comma+space separated) list of destinations that consist of a localpart and optionally an `@fqdn`.
-If you don't define a fqdn along any of the addresses, the default domain from your commandline input will be appended.
+If you don't define an fqdn along any of the addresses, the default domain from your commandline input will be appended.
 
 An example using the testdata directory of this repository:
 ```shell
