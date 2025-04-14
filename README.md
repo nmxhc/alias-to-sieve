@@ -1,12 +1,12 @@
 This script converts an alias file to a sieve script for [stalwart-mail](https://stalw.art/).
 
 ## Usage
-Given an alias file `testdata/simple.aliases` that contains lines of redirects of the form localpart with optional `@fqdn` followed by a space followed by a list (space or comma+space separated) list of destinations that consist of a localpart and optionally an `@fqdn`.
+Given an alias file [`testdata/example.aliases`](testdata/example.aliases) that contains lines of redirects of the form localpart with optional `@fqdn` followed by a space followed by a list (space or comma+space separated) list of destinations that consist of a localpart and optionally an `@fqdn`.
 If you don't define a fqdn along any of the addresses, the default domain from your commandline input will be appended.
 
 An example using the testdata directory of this repository:
 ```shell
-$ ./alias_to_sieve testdata/simple.aliases example.com
+$ ./alias_to_sieve testdata/example.aliases example.com
 ```
 ```sieve
 require ["variables", "copy", "vnd.stalwart.expressions", "envelope", "editheader"];
@@ -14,32 +14,49 @@ require ["variables", "copy", "vnd.stalwart.expressions", "envelope", "editheade
 let "i" "0";
 while "i < count(envelope.to)" {
   let "redirected" "false";
-  if eval "eq_ignore_case(envelope.to[i], 'admin@example.com')" {
-    addheader "Delivered-To" "admin@example.com";
-    redirect :copy "me@example.org";
+  if eval "eq_ignore_case(envelope.to[i], 'cali@example.com')" {
+    addheader "Delivered-To" "cali@example.com";
+    redirect :copy "camilia@example.com";
 
-    deleteheader :index 1 :is "Delivered-To" "admin@example.com";
+    deleteheader :index 1 :is "Delivered-To" "cali@example.com";
     let "redirected" "true";
   }
-  if eval "eq_ignore_case(envelope.to[i], 'postmaster@example.com')" {
-    addheader "Delivered-To" "postmaster@example.com";
-    redirect :copy "me@example.org";
+  if eval "eq_ignore_case(envelope.to[i], 'camila@example.com')" {
+    addheader "Delivered-To" "camila@example.com";
+    redirect :copy "camila@example.edu";
 
-    deleteheader :index 1 :is "Delivered-To" "postmaster@example.com";
+    deleteheader :index 1 :is "Delivered-To" "camila@example.com";
+    let "redirected" "true";
+  }
+  if eval "eq_ignore_case(envelope.to[i], 'jaiden@example.com')" {
+    addheader "Delivered-To" "jaiden@example.com";
+    redirect :copy "jaiden@example.edu";
+
+    deleteheader :index 1 :is "Delivered-To" "jaiden@example.com";
+    let "redirected" "true";
+  }
+  if eval "eq_ignore_case(envelope.to[i], 'priscilla@example.com')" {
+    addheader "Delivered-To" "priscilla@example.com";
+    redirect :copy "baldwin@example.org";
+
+    deleteheader :index 1 :is "Delivered-To" "priscilla@example.com";
     let "redirected" "true";
   }
   if eval "eq_ignore_case(envelope.to[i], 'root@example.com')" {
     addheader "Delivered-To" "root@example.com";
-    redirect :copy "me@example.org";
+    redirect :copy "baldwin@example.org";
+    redirect :copy "jaiden@example.edu";
 
     deleteheader :index 1 :is "Delivered-To" "root@example.com";
     let "redirected" "true";
   }
-  if eval "eq_ignore_case(envelope.to[i], 'sudo@example.com')" {
-    addheader "Delivered-To" "sudo@example.com";
-    redirect :copy "me@example.org";
+  if eval "eq_ignore_case(envelope.to[i], 'webteam@example.com')" {
+    addheader "Delivered-To" "webteam@example.com";
+    redirect :copy "baldwin@example.org";
+    redirect :copy "camilia@example.com";
+    redirect :copy "jaiden@example.edu";
 
-    deleteheader :index 1 :is "Delivered-To" "sudo@example.com";
+    deleteheader :index 1 :is "Delivered-To" "webteam@example.com";
     let "redirected" "true";
   }
   if eval "!redirected" {
@@ -49,10 +66,9 @@ while "i < count(envelope.to)" {
   let "i" "i+1";
 }
 discard;
-
 ```
 
-If you have multiple domains with multiple alias files, pass them all in one run: `$ ./alias_to_sieve simple.aliases example.com other.aliases example.org`.
+If you have multiple domains with multiple alias files, pass them all in one run: `$ ./alias_to_sieve simple.aliases example.com example.aliases example.org`.
 
 ## Limitations
 You cannot use apostrophes (') in any mail addresses although allowed by [RFC 5322](https://www.rfc-editor.org/rfc/rfc5322) since they would break termination of strings in sieve.
