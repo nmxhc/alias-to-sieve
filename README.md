@@ -83,38 +83,10 @@ The generated code is specific to stalwart-mail and contains non-standard sieve 
 
 
 ## Configure stalwart-mail to use it
+You need to use a stalwart version of at least 0.12.0. 
 
-1. Until [56450c6](https://github.com/stalwartlabs/sieve/commit/56450c6ccdf76f1de95931db24896599159efc53) is included in stalwart-mail by default, you need to patch stalwart's `Cargo.lock` file to include it and build it yourself: 
-```diff
-diff --git a/Cargo.lock b/Cargo.lock
-index be36759b..b4316639 100644
---- a/Cargo.lock
-+++ b/Cargo.lock
-@@ -6404,8 +6404,7 @@ checksum = "0fda2ff0d084019ba4d7c6f371c95d8fd75ce3524c3cb8fb653a3023f6323e64"
- [[package]]
- name = "sieve-rs"
- version = "0.6.0"
--source = "registry+https://github.com/rust-lang/crates.io-index"
--checksum = "15ac54053752c25a0e545dd1953de716abcc80b12cfe0b6c2f2c1c73759d4f45"
-+source = "git+https://github.com/stalwartlabs/sieve.git#56450c6ccdf76f1de95931db24896599159efc53"
- dependencies = [
-  "ahash 0.8.11",
-  "bincode",
-diff --git a/Cargo.toml b/Cargo.toml
-index f055474f..2b64c9ac 100644
---- a/Cargo.toml
-+++ b/Cargo.toml
-@@ -63,3 +63,7 @@ incremental = false
- debug-assertions = false
- overflow-checks = false
- rpath = false
-+
-+
-+[patch.crates-io]
-+sieve-rs = { git = 'https://github.com/stalwartlabs/sieve.git' }
-```
-2. Run this program and save its outputs to a file (e.g. `/tmp/virt_aliases`). 
-3. Include the following in your configuration TOML: 
+1. Run this program and save its outputs to a file (e.g. `/tmp/virt_aliases`). 
+2. Include the following in your configuration TOML: 
 ```toml
 [config]
  # We here define what comes from the TOML-file and especially add "sieve.trusted.*" to the default ones
@@ -152,5 +124,5 @@ else = false
 catch-all = true
 
 ```
-4. Create the local domains in the web-admin.
-5. Create a catch-all account. It does not receive mail that is directed towards redirects but otherwise works as a catch-all account.
+3. Create the local domains in the web-admin.
+4. Create a catch-all account. It does not receive mail that is directed towards redirects but otherwise works as a catch-all account.
